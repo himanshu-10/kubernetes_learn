@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "elitemart.fullname" . }}-test-connection"
+  labels:
+    {{- include "elitemart.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "elitemart.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

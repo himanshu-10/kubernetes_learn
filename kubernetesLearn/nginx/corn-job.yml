@@ -1,0 +1,26 @@
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: minute-backup
+  namespace: nginx
+
+spec:
+  schedule: "* * * * *"  # Every minute
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          name: backup-pod
+          labels:
+            app: backup
+        spec:
+          containers:
+            - name: backup-container
+              image: busybox:latest
+              command: 
+                - sh
+                - -c
+                - >
+                  echo "Performing backup at $(date)" && sleep 20
+
+          restartPolicy: OnFailure
